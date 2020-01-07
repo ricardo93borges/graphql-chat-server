@@ -17,7 +17,7 @@ export const typeDefs = gql`
 
   type Query {
     users: [User!]!
-    messages(senderId: ID!): [Message!]!
+    messages(senderId: ID): [Message!]!
   }
 
   type Mutation {
