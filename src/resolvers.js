@@ -1,4 +1,13 @@
+const MESSAGE_SENT = 'MESSAGE_SENT'
+
 export const resolvers = {
+  Subscription: {
+    messageSent: {
+      subscribe: (parent, args, { pubsub }, info) => {
+        return pubsub.asyncIterator([MESSAGE_SENT])
+      },
+    },
+  },
   Query: {
     users: async (parent, args, { models }, info) => {
       return await models.user.all()
@@ -24,7 +33,7 @@ export const resolvers = {
     },
   },
   Mutation: {
-    sendMessage: async (parent, args, { models }, info) => {
+    sendMessage: async (parent, args, { models, pubsub }, info) => {
       const { message, senderId, receiverId } = args.sendMessageInput
 
       const sender = await models.user.findById(senderId)
@@ -37,20 +46,22 @@ export const resolvers = {
       if (!receiver)
         throw new Error('receiver not found')
 
-      const newMessage = {
+      const result = await models.message.insert([{
         message,
         senderId,
         receiverId
-      }
+      }])
 
-      const result = await models.message.insert([newMessage])
-
-      return {
+      const newMessage = {
         id: result[0],
         message,
         sender,
         receiver
       }
+
+      pubsub.publish(MESSAGE_SENT, { messageSent: newMessage })
+
+      return newMessage
     },
   }
 };

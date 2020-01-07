@@ -1,6 +1,10 @@
 import { gql } from "apollo-server";
 
 export const typeDefs = gql`
+  type Subscription {
+    messageSent: Message
+  }
+
   type User {
     id: ID!
     name: String!
