@@ -1,14 +1,12 @@
 import { ApolloServer } from "apollo-server";
 import { PubSub } from 'apollo-server'
-import { typeDefs } from "./schema";
-import { resolvers } from "./resolvers";
+import { schema } from "./schema";
 import models from './model/index'
 
 const pubsub = new PubSub();
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context: async ({ req, res, connection }) => {
     return {
       models,

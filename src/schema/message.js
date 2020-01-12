@@ -1,17 +1,38 @@
-const MESSAGE_SENT = 'MESSAGE_SENT'
+import { gql } from "apollo-server";
+
+export const subscriptionEnum = Object.freeze({
+  MESSAGE_SENT: 'MESSAGE_SENT'
+})
+
+export const typeDef = gql`
+  extend type Query {
+    messages(senderId: ID): [Message!]!
+  }
+
+  type Subscription {
+    messageSent: Message
+  }
+
+  type Mutation {
+    sendMessage(sendMessageInput: SendMessageInput!): Message!
+  }
+
+  type Message {
+    id: ID!
+    message: String!
+    sender: User!
+    receiver: User!
+  }
+
+  input SendMessageInput {
+    message: String!
+    senderId: ID!
+    receiverId: ID!
+  }
+`
 
 export const resolvers = {
-  Subscription: {
-    messageSent: {
-      subscribe: (parent, args, { pubsub }, info) => {
-        return pubsub.asyncIterator([MESSAGE_SENT])
-      },
-    },
-  },
   Query: {
-    users: async (parent, args, { models }, info) => {
-      return await models.user.all()
-    },
     messages: async (parent, args, { models }, info) => {
       const { senderId } = args
       const users = await models.user.all();
@@ -32,6 +53,15 @@ export const resolvers = {
       return filteredMessages
     },
   },
+
+  Subscription: {
+    messageSent: {
+      subscribe: (parent, args, { pubsub }, info) => {
+        return pubsub.asyncIterator([subscriptionEnum.MESSAGE_SENT])
+      },
+    },
+  },
+
   Mutation: {
     sendMessage: async (parent, args, { models, pubsub }, info) => {
       const { message, senderId, receiverId } = args.sendMessageInput
@@ -59,9 +89,9 @@ export const resolvers = {
         receiver
       }
 
-      pubsub.publish(MESSAGE_SENT, { messageSent: newMessage })
+      pubsub.publish(subscriptionEnum.MESSAGE_SENT, { messageSent: newMessage })
 
       return newMessage
     },
   }
-};
+}
