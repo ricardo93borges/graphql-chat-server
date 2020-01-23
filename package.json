@@ -8,7 +8,9 @@
     "test": "node --exec babel-node ./tests/index.js",
     "migrate": "knex migrate:latest",
     "unmigrate": "knex migrate:rollback",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "lint": "standard",
+    "lint:fix": "standard --fix"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +27,7 @@
     "@babel/core": "^7.7.7",
     "@babel/node": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "standard": "^14.3.1"
   }
 }
