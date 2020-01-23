@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 
 module.exports = {
 
@@ -11,9 +11,9 @@ module.exports = {
       database: process.env.DB_NAME
     },
     migrations: {
-      directory: './src/data/migrations',
+      directory: './src/data/migrations'
     },
-    seeds: { directory: './src/data/seeds' },
+    seeds: { directory: './src/data/seeds' }
   },
 
   testing: {
@@ -25,9 +25,9 @@ module.exports = {
       database: process.env.DB_NAME
     },
     migrations: {
-      directory: './src/data/migrations',
+      directory: './src/data/migrations'
     },
-    seeds: { directory: './src/data/seeds' },
+    seeds: { directory: './src/data/seeds' }
   },
 
   production: {
@@ -39,9 +39,9 @@ module.exports = {
       database: process.env.DB_NAME
     },
     migrations: {
-      directory: './src/data/migrations',
+      directory: './src/data/migrations'
     },
-    seeds: { directory: './src/data/seeds' },
-  },
+    seeds: { directory: './src/data/seeds' }
+  }
 
-};
+}

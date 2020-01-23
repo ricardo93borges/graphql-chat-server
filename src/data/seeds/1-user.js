@@ -9,14 +9,14 @@ exports.seed = function (knex) {
           id: '1',
           name: 'Meryl Silverburgh',
           email: 'meryl@mgs.com',
-          password: 'kojima',
+          password: 'kojima'
         },
         {
           id: '2',
           name: 'Solid Snake',
           email: 'snake@mgs.com',
-          password: 'kojima',
+          password: 'kojima'
         }
-      ]);
-    });
-};
+      ])
+    })
+}

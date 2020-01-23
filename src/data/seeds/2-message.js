@@ -46,7 +46,7 @@ exports.seed = function (knex) {
           message: "...You're a sad, lonely man.",
           senderId: '1',
           receiverId: '2'
-        },
-      ]);
-    });
-};
+        }
+      ])
+    })
+}

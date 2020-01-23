@@ -1,23 +1,22 @@
 export default class Model {
-
-  constructor(database, table) {
+  constructor (database, table) {
     this.database = database
     this.table = table
   }
 
-  all() {
-    return this.database(this.table).select();
+  all () {
+    return this.database(this.table).select()
   }
 
-  find(conditions) {
+  find (conditions) {
     return this.database(this.table).where(conditions).select()
   }
 
-  findById(id) {
+  findById (id) {
     return this.database(this.table).where({ id }).select().first()
   }
 
-  insert(values) {
+  insert (values) {
     return this.database(this.table).insert(values)
   }
 }

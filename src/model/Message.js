@@ -1,7 +1,7 @@
 import Model from './Model'
 
 export class Message extends Model {
-  constructor(database) {
+  constructor (database) {
     super(database, 'message')
   }
 }

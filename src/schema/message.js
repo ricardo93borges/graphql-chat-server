@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from 'apollo-server'
 
 export const subscriptionEnum = Object.freeze({
   MESSAGE_SENT: 'MESSAGE_SENT'
@@ -35,8 +35,8 @@ export const resolvers = {
   Query: {
     messages: async (parent, args, { models }, info) => {
       const { senderId } = args
-      const users = await models.user.all();
-      let messages = [];
+      const users = await models.user.all()
+      let messages = []
 
       if (senderId) {
         messages = await models.message.find({ senderId })
@@ -51,15 +51,15 @@ export const resolvers = {
       })
 
       return filteredMessages
-    },
+    }
   },
 
   Subscription: {
     messageSent: {
       subscribe: (parent, args, { pubsub }, info) => {
         return pubsub.asyncIterator([subscriptionEnum.MESSAGE_SENT])
-      },
-    },
+      }
+    }
   },
 
   Mutation: {
@@ -68,13 +68,11 @@ export const resolvers = {
 
       const sender = await models.user.findById(senderId)
 
-      if (!sender)
-        throw new Error('sender not found')
+      if (!sender) { throw new Error('sender not found') }
 
       const receiver = await models.user.findById(receiverId)
 
-      if (!receiver)
-        throw new Error('receiver not found')
+      if (!receiver) { throw new Error('receiver not found') }
 
       const result = await models.message.insert([{
         message,
@@ -92,6 +90,6 @@ export const resolvers = {
       pubsub.publish(subscriptionEnum.MESSAGE_SENT, { messageSent: newMessage })
 
       return newMessage
-    },
+    }
   }
 }

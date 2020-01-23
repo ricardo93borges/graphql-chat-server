@@ -1,8 +1,8 @@
-import { merge } from "lodash";
-import { gql, makeExecutableSchema } from "apollo-server"
+import { merge } from 'lodash'
+import { gql, makeExecutableSchema } from 'apollo-server'
 import {
   typeDef as User,
-  resolvers as userResolvers,
+  resolvers as userResolvers
 } from './user'
 
 import {
@@ -17,5 +17,5 @@ const Query = gql`
 `
 export const schema = makeExecutableSchema({
   typeDefs: [Query, User, Message],
-  resolvers: merge(userResolvers, messageResolvers),
-});
+  resolvers: merge(userResolvers, messageResolvers)
+})

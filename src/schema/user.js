@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql } from 'apollo-server'
 
 export const typeDef = gql`
   extend type Query {
@@ -16,8 +16,8 @@ export const typeDef = gql`
 export const resolvers = {
   Query: {
     users: async (parent, args, { models }, info) => {
-      console.log(`here`)
-      return await models.user.all()
-    },
+      const users = await models.user.all()
+      return users
+    }
   }
 }
