@@ -9,11 +9,11 @@ export const typeDef = gql`
     messages(senderId: ID): [Message!]!
   }
 
-  type Subscription {
+  extend type Subscription {
     messageSent: Message
   }
 
-  type Mutation {
+  extend type Mutation {
     sendMessage(sendMessageInput: SendMessageInput!): Message!
   }
 

@@ -12,6 +12,10 @@ export default class Model {
     return this.database(this.table).where(conditions).select()
   }
 
+  findOne (conditions) {
+    return this.database(this.table).where(conditions).first()
+  }
+
   findById (id) {
     return this.database(this.table).where({ id }).select().first()
   }
