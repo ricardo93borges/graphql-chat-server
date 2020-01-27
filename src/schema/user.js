@@ -26,7 +26,9 @@ export const typeDef = gql`
 
 export const resolvers = {
   Query: {
-    users: async (parent, args, { models }, info) => {
+    users: async (parent, args, { models, user }, info) => {
+      if (!user) { throw new Error('You must be logged in') }
+
       const users = await models.user.all()
       return users
     }

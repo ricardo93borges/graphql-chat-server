@@ -6,7 +6,7 @@ export const subscriptionEnum = Object.freeze({
 
 export const typeDef = gql`
   extend type Query {
-    messages(senderId: ID): [Message!]!
+    messages: [Message!]!
   }
 
   extend type Subscription {
@@ -26,23 +26,17 @@ export const typeDef = gql`
 
   input SendMessageInput {
     message: String!
-    senderId: ID!
     receiverId: ID!
   }
 `
 
 export const resolvers = {
   Query: {
-    messages: async (parent, args, { models }, info) => {
-      const { senderId } = args
-      const users = await models.user.all()
-      let messages = []
+    messages: async (parent, args, { models, user }, info) => {
+      if (!user) { throw new Error('You must be logged in') }
 
-      if (senderId) {
-        messages = await models.message.find({ senderId })
-      } else {
-        messages = await models.message.all()
-      }
+      const users = await models.user.all()
+      const messages = await models.user.getMessages(user.id)
 
       const filteredMessages = messages.map(message => {
         const sender = users.find(user => user.id === message.senderId)
@@ -56,19 +50,19 @@ export const resolvers = {
 
   Subscription: {
     messageSent: {
-      subscribe: (parent, args, { pubsub }, info) => {
+      subscribe: (parent, args, { pubsub, user }, info) => {
+        if (!user) { throw new Error('You must be logged in') }
+
         return pubsub.asyncIterator([subscriptionEnum.MESSAGE_SENT])
       }
     }
   },
 
   Mutation: {
-    sendMessage: async (parent, args, { models, pubsub }, info) => {
-      const { message, senderId, receiverId } = args.sendMessageInput
+    sendMessage: async (parent, args, { models, user, pubsub }, info) => {
+      if (!user) { throw new Error('You must be logged in') }
 
-      const sender = await models.user.findById(senderId)
-
-      if (!sender) { throw new Error('sender not found') }
+      const { message, receiverId } = args.sendMessageInput
 
       const receiver = await models.user.findById(receiverId)
 
@@ -76,15 +70,15 @@ export const resolvers = {
 
       const result = await models.message.insert([{
         message,
-        senderId,
+        senderId: user.id,
         receiverId
       }])
 
       const newMessage = {
         id: result[0],
         message,
-        sender,
-        receiver
+        receiver,
+        sender: user
       }
 
       pubsub.publish(subscriptionEnum.MESSAGE_SENT, { messageSent: newMessage })

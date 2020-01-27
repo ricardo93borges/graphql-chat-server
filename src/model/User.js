@@ -15,7 +15,7 @@ export class User extends Model {
     return bcrypt.compare(password, hash)
   }
 
-  async generateToken (user) {
+  generateToken (user) {
     /* knex return a RowDataPacket object and jwt.sign function
       expects a plain object, stringify and parse it back does the trick */
     return jwt.sign(
@@ -25,5 +25,21 @@ export class User extends Model {
         expiresIn: 86400
       }
     )
+  }
+
+  async getUserByToken (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.NODE_ENV)
+      return decoded
+    } catch (error) {
+      console.log(error)
+      return null
+    }
+  }
+
+  async getMessages (userId) {
+    return this.database('message')
+      .where({ senderId: userId })
+      .orWhere({ receiverId: userId })
   }
 }
