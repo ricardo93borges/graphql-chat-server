@@ -16,7 +16,7 @@ module.exports = {
     seeds: { directory: './src/data/seeds' }
   },
 
-  testing: {
+  test: {
     client: 'mysql',
     connection: {
       host: process.env.DB_HOST,
