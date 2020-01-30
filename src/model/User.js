@@ -37,9 +37,11 @@ export class User extends Model {
     }
   }
 
-  async getMessages (userId) {
+  async getMessages (userId, lastId) {
     return this.database('message')
-      .where({ senderId: userId })
-      .orWhere({ receiverId: userId })
+      .where('id', '>', lastId)
+      .andWhere(q => q.where({ senderId: userId })
+        .orWhere({ receiverId: userId }))
+      .limit(10)
   }
 }

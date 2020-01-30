@@ -39,7 +39,7 @@ beforeEach(() => {
 
 describe('Query messages', () => {
   it('should return a list of messages', async () => {
-    const result = await resolvers.Query.messages(null, null, context)
+    const result = await resolvers.Query.messages(null, { cursor: '1' }, context)
     expect(context.models.user.all).toHaveBeenCalledTimes(1)
     expect(context.models.user.getMessages).toHaveBeenCalledTimes(1)
     expect(result.length).toBe(2)

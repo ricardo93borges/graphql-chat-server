@@ -6,7 +6,7 @@ export const subscriptionEnum = Object.freeze({
 
 export const typeDef = gql`
   extend type Query {
-    messages: [Message!]!
+    messages(cursor: String!): [Message!]!
   }
 
   extend type Subscription {
@@ -35,8 +35,9 @@ export const resolvers = {
     messages: async (parent, args, { models, user }, info) => {
       if (!user) { throw new Error('You must be logged in') }
 
+      const { cursor } = args
       const users = await models.user.all()
-      const messages = await models.user.getMessages(user.id)
+      const messages = await models.user.getMessages(user.id, cursor)
 
       const filteredMessages = messages.map(message => {
         const sender = users.find(user => user.id === message.senderId)
