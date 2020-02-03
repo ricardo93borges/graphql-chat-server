@@ -1,5 +1,5 @@
 import { merge } from 'lodash'
-import { gql, makeExecutableSchema } from 'apollo-server'
+import { gql, makeExecutableSchema } from 'apollo-server-express'
 import {
   typeDef as User,
   resolvers as userResolvers

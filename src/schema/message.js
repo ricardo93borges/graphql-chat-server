@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server'
+import { gql } from 'apollo-server-express'
 
 export const subscriptionEnum = Object.freeze({
   MESSAGE_SENT: 'MESSAGE_SENT'
