@@ -20,7 +20,7 @@ export class User extends Model {
       expects a plain object, stringify and parse it back does the trick */
     return jwt.sign(
       JSON.parse(JSON.stringify(user)),
-      process.env.NODE_ENV,
+      process.env.SECRET,
       {
         expiresIn: 86400
       }
@@ -29,7 +29,7 @@ export class User extends Model {
 
   async getUserByToken (token) {
     try {
-      const decoded = jwt.verify(token, process.env.NODE_ENV)
+      const decoded = jwt.verify(token, process.env.SECRET)
       return decoded
     } catch (error) {
       console.log(error)
