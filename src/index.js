@@ -8,8 +8,11 @@ const pubsub = new PubSub()
 const server = new ApolloServer({
   schema,
   context: async ({ req, res, connection }) => {
-    const token = req.headers.authorization.replace('Bearer ', '')
-    const user = await models.user.getUserByToken(token)
+    let user = null
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.replace('Bearer ', '')
+      user = await models.user.getUserByToken(token)
+    }
 
     return {
       models,
