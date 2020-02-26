@@ -3,19 +3,19 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export class User extends Model {
-  constructor (database) {
+  constructor(database) {
     super(database, 'user')
   }
 
-  async hash (password) {
+  async hash(password) {
     return bcrypt.hash(password, 10)
   }
 
-  async compare (hash, password) {
+  async compare(hash, password) {
     return bcrypt.compare(password, hash)
   }
 
-  generateToken (user) {
+  generateToken(user) {
     /* knex return a RowDataPacket object and jwt.sign function
       expects a plain object, stringify and parse it back does the trick */
     return jwt.sign(
@@ -27,7 +27,7 @@ export class User extends Model {
     )
   }
 
-  async getUserByToken (token) {
+  async getUserByToken(token) {
     try {
       const decoded = jwt.verify(token, process.env.SECRET)
       return decoded
@@ -37,7 +37,7 @@ export class User extends Model {
     }
   }
 
-  async getMessages (senderId, receiverId, lastId) {
+  async getMessages(senderId, lastId) {
     return this.database('message')
       .where('id', '>', lastId)
       .andWhere(q => q.where({ senderId: senderId })
