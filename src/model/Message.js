@@ -1,15 +1,18 @@
 import Model from './Model'
 
 export class Message extends Model {
-  constructor (database) {
+  constructor(database) {
     super(database, 'message')
   }
 
-  async getConversation (senderId, receiverId, lastId) {
+  /**
+   * Get messages given sender and receiver IDs
+   */
+  async getConversation(senderId, receiverId, lastId) {
     return this.database('message')
       .where('id', '>', lastId)
-      .andWhere({ senderId })
-      .andWhere({ receiverId })
+      .andWhere(q => q.whereIn('senderId', [senderId, receiverId])
+        .orWhereIn('receiverId', [senderId, receiverId]))
       .limit(10)
   }
 }

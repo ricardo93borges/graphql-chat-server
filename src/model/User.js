@@ -37,6 +37,9 @@ export class User extends Model {
     }
   }
 
+  /**
+   * Get all user's messages
+   */
   async getMessages(senderId, lastId) {
     return this.database('message')
       .where('id', '>', lastId)
