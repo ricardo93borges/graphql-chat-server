@@ -1,26 +1,28 @@
 export default class Model {
+  _startedDatabase = {};
+  
   constructor (database, table) {
     this.database = database
-    this.table = table
+    _startedDatabase = database(table)
   }
 
   all () {
-    return this.database(this.table).select()
+    return this._startedDatabase.select()
   }
 
   find (conditions) {
-    return this.database(this.table).where(conditions).select()
+    return this._startedDatabase.where(conditions).select()
   }
 
   findOne (conditions) {
-    return this.database(this.table).where(conditions).first()
+    return this._startedDatabase.where(conditions).first()
   }
 
   findById (id) {
-    return this.database(this.table).where({ id }).select().first()
+    return this._startedDatabase.where({ id }).select().first()
   }
 
   insert (values) {
-    return this.database(this.table).insert(values)
+    return this._startedDatabase.insert(values)
   }
 }
